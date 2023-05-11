@@ -6,7 +6,7 @@ buildscript {
         kotlin_version = "1.8.21"
         coroutines = "1.6.4"
         retrofit = "2.9.0"
-        chucker = "1.1.0"
+        chucker = "3.5.2"
     }
     dependencies {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"

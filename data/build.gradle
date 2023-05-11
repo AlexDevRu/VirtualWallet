@@ -15,6 +15,10 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+
+        buildConfigField "String", "CRYPTO_COMPARE_BASE_URL", '"https://min-api.cryptocompare.com/data/"'
+        buildConfigField "String", "CRYPTO_COMPARE_KEY", '"2961e0ff54bd4cf7a550da40dfa36fd34b6e2d0da2c28c4f6e69e7518d4ca94d"'
+        buildConfigField "String", "COIN_CAP_KEY", '"6d95ab19-f174-4457-a246-2068438fe957"'
     }
 
     buildTypes {
@@ -51,8 +55,8 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit"
 
-    debugImplementation "com.readystatesoftware.chuck:library:$chucker"
-    releaseImplementation "com.readystatesoftware.chuck:library-no-op:$chucker"
+    debugImplementation "com.github.chuckerteam.chucker:library:$chucker"
+    releaseImplementation "com.github.chuckerteam.chucker:library-no-op:$chucker"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
