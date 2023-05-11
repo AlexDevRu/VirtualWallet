@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -36,6 +38,20 @@ android {
 }
 
 dependencies {
+    implementation project(":domain")
+    implementation project(":data")
+
+    // DI
+    implementation "com.google.dagger:hilt-android:$hiltVersion"
+    kapt "com.google.dagger:hilt-compiler:$hiltVersion"
+    kapt "androidx.hilt:hilt-compiler:1.0.0"
+
+    implementation "com.github.bumptech.glide:glide:4.15.1"
+
+    implementation "androidx.activity:activity-ktx:1.7.1"
+    implementation "androidx.fragment:fragment-ktx:1.5.7"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
 
     implementation 'androidx.core:core-ktx:1.10.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
