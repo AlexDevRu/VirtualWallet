@@ -1,4 +1,4 @@
-package com.example.learning_android_virtualwallet_kulakov
+package com.example.learning_android_virtualwallet_kulakov.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
