@@ -5,4 +5,5 @@
     <string name="to">To</string>
     <string name="enter_your_amount">Enter your amount</string>
     <string name="usd">USD</string>
+    <string name="search_by_name">Search by name</string>
 </resources>

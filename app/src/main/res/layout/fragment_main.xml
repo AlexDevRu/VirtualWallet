@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/enter_your_amount"
             android:imeOptions="actionDone"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             tools:text="123.45" />
 
     </com.google.android.material.textfield.TextInputLayout>

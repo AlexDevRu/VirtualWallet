@@ -18,5 +18,9 @@
         android:id="@+id/coinListFragment"
         android:name="com.example.learning_android_virtualwallet_kulakov.ui.coin_list.CoinListFragment"
         android:label="CoinListFragment"
-        tools:layout="@layout/fragment_coin_list"/>
+        tools:layout="@layout/fragment_coin_list">
+        <argument
+            android:name="src"
+            app:argType="integer" />
+    </fragment>
 </navigation>

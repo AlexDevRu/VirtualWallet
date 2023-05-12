@@ -5,6 +5,7 @@ import com.example.domain.data_sources.LocalDataSource
 import com.example.domain.models.Coin
 import com.example.domain.repositories.Repository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import javax.inject.Inject
@@ -30,6 +31,14 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun getCoinById(id: String) = withContext(Dispatchers.IO) {
         localDataSource.getCoinById(id)
+    }
+
+    override suspend fun changeObservableCoin(id: String, observable: Boolean) = withContext(Dispatchers.IO) {
+        localDataSource.changeObservableCoin(id, observable)
+    }
+
+    override fun getObservableCoinsFlow(): Flow<List<Coin>> {
+        return localDataSource.getObservableCoinsFlow()
     }
 
 }
