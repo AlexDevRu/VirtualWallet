@@ -10,7 +10,7 @@ data class CoinListResponseDto(
         @SerializedName("Id")
         val id: String,
         @SerializedName("ImageUrl")
-        val imageUrl: String,
+        val imageUrl: String?,
         @SerializedName("Symbol")
         val symbol: String,
         @SerializedName("FullName")

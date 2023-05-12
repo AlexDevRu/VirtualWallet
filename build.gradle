@@ -7,10 +7,12 @@ buildscript {
         coroutines = "1.6.4"
         retrofit = "2.9.0"
         chucker = "3.5.2"
+        nav_version = "2.5.3"
     }
     dependencies {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
     }
     repositories {
         mavenCentral()
