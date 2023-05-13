@@ -1,10 +1,12 @@
 package com.example.learning_android_virtualwallet_kulakov.ui.main
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.use_cases.ChangeObservableCoinUseCase
 import com.example.domain.use_cases.GetLocalCoinByIdUseCase
 import com.example.domain.use_cases.GetObservableCoinsFlowUseCase
+import com.example.domain.use_cases.UpdatePricesUseCase
 import com.example.domain.utils.SharedPrefs
 import com.example.learning_android_virtualwallet_kulakov.ui.models.CoinUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +21,8 @@ class MainViewModel @Inject constructor(
     private val getLocalCoinByIdUseCase: GetLocalCoinByIdUseCase,
     private val sharedPrefs: SharedPrefs,
     private val changeObservableCoinUseCase: ChangeObservableCoinUseCase,
-    private val getObservableCoinsFlowUseCase: GetObservableCoinsFlowUseCase
+    private val getObservableCoinsFlowUseCase: GetObservableCoinsFlowUseCase,
+    private val updatePricesUseCase: UpdatePricesUseCase
 ) : ViewModel() {
 
     private val _selectedCoinId = MutableStateFlow<String?>(null)
@@ -29,12 +32,13 @@ class MainViewModel @Inject constructor(
     val amount: Float
         get() = _amount.value
 
-    val selectedCoin = _selectedCoinId.map {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val selectedCoin = _selectedCoinId.flatMapLatest {
         if (it.isNullOrBlank())
-            null
+            flowOf(null)
         else
-            getLocalCoinByIdUseCase(it)
-    }.flowOn(Dispatchers.IO).stateIn(
+            getLocalCoinByIdUseCase.getFlow(it)
+    }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
         null
@@ -42,11 +46,15 @@ class MainViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val convertedCoins = selectedCoin.flatMapLatest { currentCoin ->
+        Log.d("asd", "currentCoin: $currentCoin")
         _amount.flatMapLatest { amount ->
+            Log.d("asd", "amount: $amount")
             getObservableCoinsFlowUseCase().map {
                 val currentSumInUsd = amount * (currentCoin?.price?.toFloat() ?: 1f)
+                Log.d("asd", "currentSumInUsd: $currentSumInUsd")
                 it.map {
                     val amountPrice = currentSumInUsd / it.price
+                    Log.d("asd", "amountPrice: $amountPrice")
                     CoinUiModel.CoinUI(it, amountPrice)
                 } + CoinUiModel.AddNewCoin
             }
@@ -66,6 +74,7 @@ class MainViewModel @Inject constructor(
         sharedPrefs.selectedCoinId = coinId
         viewModelScope.launch {
             _selectedCoinId.emit(coinId)
+            updatePricesUseCase(coinId)
         }
     }
 

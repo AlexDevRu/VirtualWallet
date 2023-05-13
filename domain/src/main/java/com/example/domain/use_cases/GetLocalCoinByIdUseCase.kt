@@ -7,4 +7,5 @@ class GetLocalCoinByIdUseCase @Inject constructor(
     private val repository: Repository
 ) {
     suspend operator fun invoke(id: String) = repository.getCoinById(id)
+    fun getFlow(id: String) = repository.getCoinByIdFlow(id)
 }

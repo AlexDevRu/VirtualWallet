@@ -18,11 +18,17 @@ interface CoinDao {
     @Query("select * from coins where id = :id")
     suspend fun getCoinById(id: String): CoinEntity?
 
+    @Query("select * from coins where id = :id")
+    fun getCoinByIdFlow(id: String): Flow<CoinEntity?>
+
     @Query("update coins set observable = :observable where id = :id")
     suspend fun updateCoinObservable(id: String, observable: Boolean)
 
     @Query("select id from coins where observable = 1")
     suspend fun getObservableCoinIds() : List<String>
+
+    @Query("select * from coins where price > 0")
+    suspend fun getCoinsWithPrices() : List<CoinEntity>
 
     @Query("select * from coins where observable = 1")
     fun getObservableCoins() : Flow<List<CoinEntity>>

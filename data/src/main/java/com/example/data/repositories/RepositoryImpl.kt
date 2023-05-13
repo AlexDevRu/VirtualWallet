@@ -18,8 +18,12 @@ class RepositoryImpl @Inject constructor(
         try {
             val coins = cryptoCompareDataSource.getAllCoins()
             val observableCoinIds = localDataSource.getObservableCoinIds()
-            val newCoins = coins.map {
-                it.copy(observable = observableCoinIds.contains(it.id))
+            val coinsWithPrices = localDataSource.getCoinsWithPrices()
+            val newCoins = coins.map { coin ->
+                coin.copy(
+                    price = coinsWithPrices.firstOrNull { it.id == coin.id }?.price ?: -1.0,
+                    observable = observableCoinIds.contains(coin.id)
+                )
             }
             localDataSource.insertCoins(newCoins)
             localDataSource.getAllCoins()
@@ -36,8 +40,11 @@ class RepositoryImpl @Inject constructor(
         localDataSource.getCoinById(id)
     }
 
+    override fun getCoinByIdFlow(id: String): Flow<Coin?> {
+        return localDataSource.getCoinByIdFlow(id)
+    }
+
     override suspend fun changeObservableCoin(id: String, observable: Boolean) = withContext(Dispatchers.IO) {
-        localDataSource.changeObservableCoin(id, observable)
         if (observable) {
             try {
                 val coin = localDataSource.getCoinById(id) ?: return@withContext
@@ -45,6 +52,7 @@ class RepositoryImpl @Inject constructor(
                 localDataSource.updatePrice(coin.id, priceInUsd)
             } catch (e: Exception) {}
         }
+        localDataSource.changeObservableCoin(id, observable)
     }
 
     override fun getObservableCoinsFlow(): Flow<List<Coin>> {
@@ -52,14 +60,11 @@ class RepositoryImpl @Inject constructor(
     }
 
     override suspend fun updatePrices(coinId: String) = withContext(Dispatchers.IO) {
-        /*val coin = localDataSource.getCoinById(coinId) ?: return@withContext
-        val priceInUsd = cryptoCompareDataSource.getPriceInUsd(coin.symbol)
-        localDataSource.updatePrice(coinId, priceInUsd)*/
-        /*val observableCoins = localDataSource.getObservableCoinsFlow().last()
-        observableCoins.forEach {
-            val priceInUsd = cryptoCompareDataSource.getPriceInUsd(it.symbol)
+        try {
+            val coin = localDataSource.getCoinById(coinId) ?: return@withContext
+            val priceInUsd = cryptoCompareDataSource.getPriceInUsd(coin.symbol)
             localDataSource.updatePrice(coinId, priceInUsd)
-        }*/
+        } catch (e: Exception) {}
     }
 
 }

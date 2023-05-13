@@ -24,6 +24,10 @@ class LocalDataSourceImpl @Inject constructor(
         return coinDao.getCoinById(id)?.toDomainModel()
     }
 
+    override fun getCoinByIdFlow(id: String): Flow<Coin?> {
+        return coinDao.getCoinByIdFlow(id).map { it?.toDomainModel() }
+    }
+
     override suspend fun changeObservableCoin(id: String, observable: Boolean) {
         coinDao.updateCoinObservable(id, observable)
     }
@@ -38,5 +42,9 @@ class LocalDataSourceImpl @Inject constructor(
 
     override suspend fun getObservableCoinIds(): List<String> {
         return coinDao.getObservableCoinIds()
+    }
+
+    override suspend fun getCoinsWithPrices(): List<Coin> {
+        return coinDao.getCoinsWithPrices().map { it.toDomainModel() }
     }
 }
