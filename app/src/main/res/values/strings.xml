@@ -6,4 +6,6 @@
     <string name="enter_your_amount">Enter your amount</string>
     <string name="usd">USD</string>
     <string name="search_by_name">Search by name</string>
+    <string name="crypto_compare">Crypto compare</string>
+    <string name="data_is_unavailable">data is unavailable</string>
 </resources>

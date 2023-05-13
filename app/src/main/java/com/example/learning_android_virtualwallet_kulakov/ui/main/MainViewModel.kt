@@ -9,6 +9,7 @@ import com.example.domain.utils.SharedPrefs
 import com.example.learning_android_virtualwallet_kulakov.ui.models.CoinUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,6 +24,11 @@ class MainViewModel @Inject constructor(
 
     private val _selectedCoinId = MutableStateFlow<String?>(null)
 
+    private val _amount = MutableStateFlow(0f)
+
+    val amount: Float
+        get() = _amount.value
+
     val selectedCoin = _selectedCoinId.map {
         if (it.isNullOrBlank())
             null
@@ -34,8 +40,17 @@ class MainViewModel @Inject constructor(
         null
     )
 
-    val convertedCoins = getObservableCoinsFlowUseCase().map {
-        it.map { CoinUiModel.CoinUI(it) } + CoinUiModel.AddNewCoin
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val convertedCoins = selectedCoin.flatMapLatest { currentCoin ->
+        _amount.flatMapLatest { amount ->
+            getObservableCoinsFlowUseCase().map {
+                val currentSumInUsd = amount * (currentCoin?.price?.toFloat() ?: 1f)
+                it.map {
+                    val amountPrice = currentSumInUsd / it.price
+                    CoinUiModel.CoinUI(it, amountPrice)
+                } + CoinUiModel.AddNewCoin
+            }
+        }
     }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
@@ -44,6 +59,7 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch { _selectedCoinId.emit(sharedPrefs.selectedCoinId) }
+        viewModelScope.launch { _amount.emit(sharedPrefs.coinAmount) }
     }
 
     fun setSelectedCoin(coinId: String) {
@@ -55,11 +71,18 @@ class MainViewModel @Inject constructor(
 
     fun convertCurrency(amount: Float) {
         sharedPrefs.coinAmount = amount
+        viewModelScope.launch { _amount.emit(amount) }
     }
 
     fun addCoin(id: String) {
         viewModelScope.launch {
             changeObservableCoinUseCase(id, true)
+        }
+    }
+
+    fun removeCoin(id: String) {
+        viewModelScope.launch {
+            changeObservableCoinUseCase(id, false)
         }
     }
 

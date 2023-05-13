@@ -9,4 +9,5 @@ interface Repository {
     suspend fun getCoinById(id: String) : Coin?
     suspend fun changeObservableCoin(id: String, observable: Boolean)
     fun getObservableCoinsFlow() : Flow<List<Coin>>
+    suspend fun updatePrices(coinId: String)
 }

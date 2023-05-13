@@ -14,4 +14,8 @@ class CryptoCompareDataSourceImpl @Inject constructor(
         return cryptoCompareService.getAllCoins().toDomainModel()
     }
 
+    override suspend fun getPriceInUsd(symbol: String): Double {
+        return cryptoCompareService.getPrice(symbol).USD
+    }
+
 }

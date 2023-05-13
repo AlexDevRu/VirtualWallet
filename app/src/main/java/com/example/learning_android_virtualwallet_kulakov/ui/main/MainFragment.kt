@@ -51,6 +51,8 @@ class MainFragment : Fragment(), View.OnClickListener, FragmentResultListener, C
             viewModel.convertCurrency(value)
         }
 
+        binding.etMoney.setText(viewModel.amount.toString())
+
         observe()
     }
 
@@ -92,6 +94,10 @@ class MainFragment : Fragment(), View.OnClickListener, FragmentResultListener, C
 
     override fun onItemClick(coin: Coin) {
 
+    }
+
+    override fun onRemoveClick(coin: Coin) {
+        viewModel.removeCoin(coin.id)
     }
 
     override fun onAddNewCoin() {

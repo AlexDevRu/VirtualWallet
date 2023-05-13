@@ -4,4 +4,5 @@ import com.example.domain.models.Coin
 
 interface CryptoCompareDataSource {
     suspend fun getAllCoins() : List<Coin>
+    suspend fun getPriceInUsd(symbol: String) : Double
 }

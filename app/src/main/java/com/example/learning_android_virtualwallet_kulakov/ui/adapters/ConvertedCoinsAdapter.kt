@@ -26,12 +26,20 @@ class ConvertedCoinsAdapter(
             override fun areContentsTheSame(oldItem: CoinUiModel, newItem: CoinUiModel): Boolean {
                 return oldItem == newItem
             }
+
+            override fun getChangePayload(oldItem: CoinUiModel, newItem: CoinUiModel): Any? {
+                return if (oldItem is CoinUiModel.CoinUI && newItem is CoinUiModel.CoinUI)
+                    oldItem.amountPrice != newItem.amountPrice
+                else
+                    null
+            }
         }
     }
 
     interface Listener {
         fun onItemClick(coin: Coin)
         fun onAddNewCoin()
+        fun onRemoveClick(coin: Coin)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
@@ -58,6 +66,17 @@ class ConvertedCoinsAdapter(
         holder.bind(getItem(position))
     }
 
+    override fun onBindViewHolder(
+        holder: BaseViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        if (payloads.isNotEmpty() && payloads.first() == false)
+            (holder as? CoinViewHolder)?.bindPrice(getItem(position))
+        else
+            super.onBindViewHolder(holder, position, payloads)
+    }
+
     abstract class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         open fun bind(coin: CoinUiModel) {}
     }
@@ -70,12 +89,15 @@ class ConvertedCoinsAdapter(
 
         init {
             binding.root.setOnClickListener(this)
+            binding.btnClose.setOnClickListener(this)
         }
 
         override fun bind(coin: CoinUiModel) {
             if (coin !is CoinUiModel.CoinUI) return
             this.coin = coin.coin
+
             binding.tvCurrency.text = coin.coin.fullName
+
             if (coin.coin.imageUrl.isNullOrBlank())
                 binding.ivCurrency.setImageResource(R.drawable.ic_gold_coin)
             else
@@ -83,11 +105,22 @@ class ConvertedCoinsAdapter(
                     .load(coin.coin.getFullImageUrl())
                     .error(R.drawable.ic_gold_coin)
                     .into(binding.ivCurrency)
+
+            bindPrice(coin)
+        }
+
+        fun bindPrice(coin: CoinUiModel) {
+            if (coin !is CoinUiModel.CoinUI) return
+            if (coin.amountPrice < 0)
+                binding.tvCryptoComparePrice.setText(R.string.data_is_unavailable)
+            else
+                binding.tvCryptoComparePrice.text = coin.amountPrice.toString()
         }
 
         override fun onClick(view: View?) {
             when (view) {
                 binding.root -> coin?.let { listener.onItemClick(it) }
+                binding.btnClose -> coin?.let { listener.onRemoveClick(it) }
             }
         }
     }

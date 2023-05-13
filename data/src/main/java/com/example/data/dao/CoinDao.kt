@@ -21,6 +21,12 @@ interface CoinDao {
     @Query("update coins set observable = :observable where id = :id")
     suspend fun updateCoinObservable(id: String, observable: Boolean)
 
+    @Query("select id from coins where observable = 1")
+    suspend fun getObservableCoinIds() : List<String>
+
     @Query("select * from coins where observable = 1")
     fun getObservableCoins() : Flow<List<CoinEntity>>
+
+    @Query("update coins set price = :price where id = :id")
+    suspend fun updatePrice(id: String, price: Double)
 }
