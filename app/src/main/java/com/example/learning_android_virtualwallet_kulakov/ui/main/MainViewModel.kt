@@ -1,8 +1,11 @@
 package com.example.learning_android_virtualwallet_kulakov.ui.main
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.*
+import com.example.data.work.ConvertWorker
 import com.example.domain.use_cases.ChangeObservableCoinUseCase
 import com.example.domain.use_cases.GetLocalCoinByIdUseCase
 import com.example.domain.use_cases.GetObservableCoinsFlowUseCase
@@ -14,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,7 +26,8 @@ class MainViewModel @Inject constructor(
     private val sharedPrefs: SharedPrefs,
     private val changeObservableCoinUseCase: ChangeObservableCoinUseCase,
     private val getObservableCoinsFlowUseCase: GetObservableCoinsFlowUseCase,
-    private val updatePricesUseCase: UpdatePricesUseCase
+    private val updatePricesUseCase: UpdatePricesUseCase,
+    private val app: Application
 ) : ViewModel() {
 
     private val _selectedCoinId = MutableStateFlow<String?>(null)
@@ -68,6 +73,21 @@ class MainViewModel @Inject constructor(
     init {
         viewModelScope.launch { _selectedCoinId.emit(sharedPrefs.selectedCoinId) }
         viewModelScope.launch { _amount.emit(sharedPrefs.coinAmount) }
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val workRequest = PeriodicWorkRequestBuilder<ConvertWorker>(12, TimeUnit.HOURS)
+            .setInitialDelay(12, TimeUnit.HOURS)
+            .setConstraints(constraints)
+            .build()
+
+        WorkManager.getInstance(app).enqueueUniquePeriodicWork(
+            "SYNC",
+            ExistingPeriodicWorkPolicy.KEEP,
+            workRequest
+        )
     }
 
     fun setSelectedCoin(coinId: String) {

@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.models.Coin
 import com.example.domain.use_cases.GetAllCoinsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
