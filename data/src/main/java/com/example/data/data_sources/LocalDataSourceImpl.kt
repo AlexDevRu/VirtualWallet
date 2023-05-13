@@ -20,6 +20,10 @@ class LocalDataSourceImpl @Inject constructor(
         return coinDao.getAllCoins().map { it.toDomainModel() }
     }
 
+    override fun getAllCoinsFlow(query: String): Flow<List<Coin>> {
+        return coinDao.getAllCoinsFlow(query.trim()).map { it.map { it.toDomainModel() } }
+    }
+
     override suspend fun getCoinById(id: String): Coin? {
         return coinDao.getCoinById(id)?.toDomainModel()
     }

@@ -12,6 +12,9 @@ interface CoinDao {
     @Query("select * from coins order by fullName asc")
     suspend fun getAllCoins() : List<CoinEntity>
 
+    @Query("select * from coins where fullName like '%' || :query || '%' order by fullName asc")
+    fun getAllCoinsFlow(query: String) : Flow<List<CoinEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCoins(coins: List<CoinEntity>)
 

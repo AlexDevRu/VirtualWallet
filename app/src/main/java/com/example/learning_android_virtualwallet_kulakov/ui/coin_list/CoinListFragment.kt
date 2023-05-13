@@ -75,6 +75,7 @@ class CoinListFragment : Fragment(), AvailableCoinsAdapter.Listener, SearchView.
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
+        viewModel.setQuery(newText)
         return true
     }
 

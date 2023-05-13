@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface LocalDataSource {
     suspend fun insertCoins(coins: List<Coin>)
     suspend fun getAllCoins() : List<Coin>
+    fun getAllCoinsFlow(query: String): Flow<List<Coin>>
     suspend fun getCoinById(id: String) : Coin?
     fun getCoinByIdFlow(id: String) : Flow<Coin?>
     suspend fun changeObservableCoin(id: String, observable: Boolean)

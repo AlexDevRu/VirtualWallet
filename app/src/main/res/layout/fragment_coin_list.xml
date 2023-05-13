@@ -9,6 +9,7 @@
         android:id="@+id/svSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:iconifiedByDefault="false"
         app:layout_constraintTop_toTopOf="parent"
         app:queryHint="@string/search_by_name" />
 

@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface Repository {
     suspend fun getAllCoins() : List<Coin>
+    fun getAllCoinsFlow(query: String) : Flow<List<Coin>>
     suspend fun insertCoins(coins: List<Coin>)
     suspend fun getCoinById(id: String) : Coin?
     fun getCoinByIdFlow(id: String) : Flow<Coin?>

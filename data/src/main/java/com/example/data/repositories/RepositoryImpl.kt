@@ -32,6 +32,10 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getAllCoinsFlow(query: String): Flow<List<Coin>> {
+        return localDataSource.getAllCoinsFlow(query)
+    }
+
     override suspend fun insertCoins(coins: List<Coin>) = withContext(Dispatchers.IO) {
         localDataSource.insertCoins(coins)
     }
