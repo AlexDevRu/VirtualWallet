@@ -55,12 +55,14 @@ class MainViewModel @Inject constructor(
         _amount.flatMapLatest { amount ->
             Log.d("asd", "amount: $amount")
             getObservableCoinsFlowUseCase().map {
-                val currentSumInUsd = amount * (currentCoin?.price?.toFloat() ?: 1f)
+                val currentSumInUsd = amount * (currentCoin?.cryptoComparePrice?.toFloat() ?: 1f)
                 Log.d("asd", "currentSumInUsd: $currentSumInUsd")
                 it.map {
-                    val amountPrice = currentSumInUsd / it.price
-                    Log.d("asd", "amountPrice: $amountPrice")
-                    CoinUiModel.CoinUI(it, amountPrice)
+                    val cryptoComparePrice = currentSumInUsd / it.cryptoComparePrice
+                    val coinCapPrice = currentSumInUsd / it.coinCapPrice
+                    Log.d("asd", "cryptoComparePrice: $cryptoComparePrice")
+                    Log.d("asd", "coinCapPrice: $coinCapPrice")
+                    CoinUiModel.CoinUI(it, cryptoComparePrice, coinCapPrice)
                 } + CoinUiModel.AddNewCoin
             }
         }
@@ -94,7 +96,8 @@ class MainViewModel @Inject constructor(
         sharedPrefs.selectedCoinId = coinId
         viewModelScope.launch {
             _selectedCoinId.emit(coinId)
-            updatePricesUseCase(coinId)
+            if (coinId.isNotBlank())
+                updatePricesUseCase(coinId)
         }
     }
 

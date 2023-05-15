@@ -9,10 +9,10 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CoinDao {
-    @Query("select * from coins order by fullName asc")
+    @Query("select * from coins")
     suspend fun getAllCoins() : List<CoinEntity>
 
-    @Query("select * from coins where fullName like '%' || :query || '%' order by fullName asc")
+    @Query("select * from coins where fullName like '%' || :query || '%'")
     fun getAllCoinsFlow(query: String) : Flow<List<CoinEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -30,12 +30,12 @@ interface CoinDao {
     @Query("select id from coins where observable = 1")
     suspend fun getObservableCoinIds() : List<String>
 
-    @Query("select * from coins where price > 0")
+    @Query("select * from coins where cryptoComparePrice > 0 or coinCapPrice > 0")
     suspend fun getCoinsWithPrices() : List<CoinEntity>
 
     @Query("select * from coins where observable = 1")
     fun getObservableCoins() : Flow<List<CoinEntity>>
 
-    @Query("update coins set price = :price where id = :id")
-    suspend fun updatePrice(id: String, price: Double)
+    @Query("update coins set cryptoComparePrice = :cryptoComparePrice, coinCapPrice = :coinCapPrice where id = :id")
+    suspend fun updatePrice(id: String, cryptoComparePrice: Double, coinCapPrice: Double)
 }

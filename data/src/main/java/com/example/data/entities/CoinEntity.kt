@@ -10,6 +10,7 @@ data class CoinEntity(
     val imageUrl: String?,
     val symbol: String,
     val fullName: String,
-    val price: Double,
+    val cryptoComparePrice: Double,
+    val coinCapPrice: Double,
     val observable: Boolean = false
 )

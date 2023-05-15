@@ -1,5 +1,6 @@
 package com.example.data.repositories
 
+import com.example.domain.data_sources.CoinCapDataSource
 import com.example.domain.data_sources.CryptoCompareDataSource
 import com.example.domain.data_sources.LocalDataSource
 import com.example.domain.models.Coin
@@ -11,6 +12,7 @@ import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
     private val cryptoCompareDataSource: CryptoCompareDataSource,
+    private val coinCapDataSource: CoinCapDataSource,
     private val localDataSource: LocalDataSource
 ): Repository {
 
@@ -20,8 +22,10 @@ class RepositoryImpl @Inject constructor(
             val observableCoinIds = localDataSource.getObservableCoinIds()
             val coinsWithPrices = localDataSource.getCoinsWithPrices()
             val newCoins = coins.map { coin ->
+                val localCoin = coinsWithPrices.firstOrNull { it.id == coin.id }
                 coin.copy(
-                    price = coinsWithPrices.firstOrNull { it.id == coin.id }?.price ?: -1.0,
+                    cryptoComparePrice = localCoin?.cryptoComparePrice ?: -1.0,
+                    coinCapPrice = localCoin?.coinCapPrice ?: -1.0,
                     observable = observableCoinIds.contains(coin.id)
                 )
             }
@@ -50,11 +54,7 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun changeObservableCoin(id: String, observable: Boolean) = withContext(Dispatchers.IO) {
         if (observable) {
-            try {
-                val coin = localDataSource.getCoinById(id) ?: return@withContext
-                val priceInUsd = cryptoCompareDataSource.getPriceInUsd(coin.symbol)
-                localDataSource.updatePrice(coin.id, priceInUsd)
-            } catch (e: Exception) {}
+            updatePrices(id)
         }
         localDataSource.changeObservableCoin(id, observable)
     }
@@ -66,8 +66,9 @@ class RepositoryImpl @Inject constructor(
     override suspend fun updatePrices(coinId: String) = withContext(Dispatchers.IO) {
         try {
             val coin = localDataSource.getCoinById(coinId) ?: return@withContext
-            val priceInUsd = cryptoCompareDataSource.getPriceInUsd(coin.symbol)
-            localDataSource.updatePrice(coinId, priceInUsd)
+            val priceInUsd1 = cryptoCompareDataSource.getPriceInUsd(coin.symbol)
+            val priceInUsd2 = coinCapDataSource.getPriceInUsd(coin.symbol)
+            localDataSource.updatePrice(coinId, priceInUsd1, priceInUsd2)
         } catch (e: Exception) {}
     }
 

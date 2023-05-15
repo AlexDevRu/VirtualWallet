@@ -10,7 +10,8 @@ fun CoinListResponseDto.toDomainModel() = data.map { (_, coin) ->
         symbol = coin.symbol,
         fullName = coin.fullName,
         imageUrl = coin.imageUrl,
-        price = -1.0,
+        cryptoComparePrice = -1.0,
+        coinCapPrice = -1.0,
         observable = false
     )
 }
@@ -20,7 +21,8 @@ fun Coin.toEntity() = CoinEntity(
     symbol = symbol,
     fullName = fullName,
     imageUrl = imageUrl,
-    price = price,
+    cryptoComparePrice = cryptoComparePrice,
+    coinCapPrice = coinCapPrice,
     observable = observable
 )
 
@@ -29,6 +31,7 @@ fun CoinEntity.toDomainModel() = Coin(
     symbol = symbol,
     fullName = fullName,
     imageUrl = imageUrl,
-    price = price,
+    cryptoComparePrice = cryptoComparePrice,
+    coinCapPrice = coinCapPrice,
     observable = observable
 )

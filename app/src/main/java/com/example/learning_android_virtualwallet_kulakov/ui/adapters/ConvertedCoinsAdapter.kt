@@ -29,7 +29,7 @@ class ConvertedCoinsAdapter(
 
             override fun getChangePayload(oldItem: CoinUiModel, newItem: CoinUiModel): Any? {
                 return if (oldItem is CoinUiModel.CoinUI && newItem is CoinUiModel.CoinUI)
-                    oldItem.amountPrice != newItem.amountPrice
+                    oldItem.cryptoComparePrice != newItem.cryptoComparePrice || oldItem.coinCapPrice != newItem.coinCapPrice
                 else
                     null
             }
@@ -111,10 +111,16 @@ class ConvertedCoinsAdapter(
 
         fun bindPrice(coin: CoinUiModel) {
             if (coin !is CoinUiModel.CoinUI) return
-            if (coin.amountPrice < 0)
+
+            if (coin.cryptoComparePrice < 0)
                 binding.tvCryptoComparePrice.setText(R.string.data_is_unavailable)
             else
-                binding.tvCryptoComparePrice.text = coin.amountPrice.toString()
+                binding.tvCryptoComparePrice.text = String.format("%.2f", coin.cryptoComparePrice)
+
+            if (coin.coinCapPrice < 0)
+                binding.tvCoinCapPrice.setText(R.string.data_is_unavailable)
+            else
+                binding.tvCoinCapPrice.text = String.format("%.2f", coin.coinCapPrice)
         }
 
         override fun onClick(view: View?) {

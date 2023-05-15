@@ -15,7 +15,15 @@ class CoinListViewModel @Inject constructor(
     private val getAllCoinsUseCase: GetAllCoinsUseCase
 ) : ViewModel() {
 
-    private val _coins = MutableStateFlow<List<Coin>>(emptyList())
+    private val usd = Coin(
+        id = "",
+        imageUrl = null,
+        symbol = "USD",
+        fullName = "USD",
+        cryptoComparePrice = 1.0,
+        coinCapPrice = 1.0,
+        observable = false
+    )
 
     private val _query = MutableStateFlow("")
     val query: String
@@ -26,7 +34,12 @@ class CoinListViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val coins = _query.flatMapLatest {
-        getAllCoinsUseCase.getFlow(it)
+        getAllCoinsUseCase.getFlow(it).map {
+            val list = mutableListOf<Coin>()
+            list.add(usd)
+            list.addAll(it)
+            list
+        }
     }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
@@ -36,7 +49,7 @@ class CoinListViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             _loading.emit(true)
-            _coins.emit(getAllCoinsUseCase())
+            getAllCoinsUseCase()
             _loading.emit(false)
         }
     }

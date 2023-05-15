@@ -3,6 +3,7 @@ package com.example.data.di
 import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.example.data.BuildConfig
+import com.example.data.services.CoinCapService
 import com.example.data.services.CryptoCompareService
 import com.google.gson.Gson
 import dagger.Module
@@ -46,6 +47,24 @@ object NetworkModule {
             .build()
 
         return retrofit.create(CryptoCompareService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideCoinCapService(
+        @ApplicationContext app: Context
+    ) : CoinCapService {
+        val okHttpClient = OkHttpClient()
+            .newBuilder()
+            .addInterceptor(ChuckerInterceptor.Builder(app).build())
+            .build()
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BuildConfig.COIN_CAP_BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create(Gson()))
+            .client(okHttpClient)
+            .build()
+
+        return retrofit.create(CoinCapService::class.java)
     }
 
 }

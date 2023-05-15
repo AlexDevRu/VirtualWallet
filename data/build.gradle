@@ -18,6 +18,8 @@ android {
 
         buildConfigField "String", "CRYPTO_COMPARE_BASE_URL", '"https://min-api.cryptocompare.com/data/"'
         buildConfigField "String", "CRYPTO_COMPARE_KEY", '"2961e0ff54bd4cf7a550da40dfa36fd34b6e2d0da2c28c4f6e69e7518d4ca94d"'
+        buildConfigField "String", "COIN_CAP_BASE_URL", '"https://api.coincap.io/v2/"'
+        buildConfigField "String", "API_NINJAS_BASE_URL", '"https://api.api-ninjas.com/v1/"'
         buildConfigField "String", "COIN_CAP_KEY", '"6d95ab19-f174-4457-a246-2068438fe957"'
     }
 

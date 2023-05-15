@@ -5,7 +5,8 @@ data class Coin(
     val imageUrl: String?,
     val symbol: String,
     val fullName: String,
-    val price: Double,
+    val cryptoComparePrice: Double,
+    val coinCapPrice: Double,
     val observable: Boolean
 ) {
     fun getFullImageUrl() = "https://www.cryptocompare.com$imageUrl"

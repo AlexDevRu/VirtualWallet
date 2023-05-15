@@ -1,7 +1,9 @@
 package com.example.data.di
 
+import com.example.data.data_sources.CoinCapDataSourceImpl
 import com.example.data.data_sources.CryptoCompareDataSourceImpl
 import com.example.data.data_sources.LocalDataSourceImpl
+import com.example.domain.data_sources.CoinCapDataSource
 import com.example.domain.data_sources.CryptoCompareDataSource
 import com.example.domain.data_sources.LocalDataSource
 import dagger.Binds
@@ -16,6 +18,10 @@ abstract class DatasourceModule {
     @Singleton
     @Binds
     abstract fun bindsCryptoCompareDataSource(cryptoCompareDataSourceImpl: CryptoCompareDataSourceImpl) : CryptoCompareDataSource
+
+    @Singleton
+    @Binds
+    abstract fun bindsCoinCapDataSource(coinCapDataSourceImpl: CoinCapDataSourceImpl) : CoinCapDataSource
 
     @Singleton
     @Binds
