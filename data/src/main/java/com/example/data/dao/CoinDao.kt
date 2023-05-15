@@ -34,7 +34,10 @@ interface CoinDao {
     suspend fun getCoinsWithPrices() : List<CoinEntity>
 
     @Query("select * from coins where observable = 1")
-    fun getObservableCoins() : Flow<List<CoinEntity>>
+    fun getObservableCoinsFlow() : Flow<List<CoinEntity>>
+
+    @Query("select * from coins where observable = 1")
+    suspend fun getObservableCoins() : List<CoinEntity>
 
     @Query("update coins set cryptoComparePrice = :cryptoComparePrice, coinCapPrice = :coinCapPrice where id = :id")
     suspend fun updatePrice(id: String, cryptoComparePrice: Double, coinCapPrice: Double)

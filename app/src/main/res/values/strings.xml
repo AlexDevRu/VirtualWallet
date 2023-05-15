@@ -9,4 +9,7 @@
     <string name="crypto_compare">Crypto compare</string>
     <string name="data_is_unavailable">data is unavailable</string>
     <string name="coin_cap">Coin cap</string>
+    <string name="confirm">Confirm</string>
+    <string name="coin_amount">%f %s</string>
+    <string name="no_subscribed_coins">No subscribed coins</string>
 </resources>

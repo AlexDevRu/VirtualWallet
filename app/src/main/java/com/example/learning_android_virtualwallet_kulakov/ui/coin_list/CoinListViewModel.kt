@@ -1,9 +1,11 @@
 package com.example.learning_android_virtualwallet_kulakov.ui.coin_list
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.models.Coin
 import com.example.domain.use_cases.GetAllCoinsUseCase
+import com.example.learning_android_virtualwallet_kulakov.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
@@ -12,14 +14,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CoinListViewModel @Inject constructor(
-    private val getAllCoinsUseCase: GetAllCoinsUseCase
+    private val getAllCoinsUseCase: GetAllCoinsUseCase,
+    app: Application
 ) : ViewModel() {
 
     private val usd = Coin(
         id = "",
         imageUrl = null,
-        symbol = "USD",
-        fullName = "USD",
+        symbol = app.getString(R.string.usd),
+        fullName = app.getString(R.string.usd),
         cryptoComparePrice = 1.0,
         coinCapPrice = 1.0,
         observable = false

@@ -63,6 +63,10 @@ class RepositoryImpl @Inject constructor(
         return localDataSource.getObservableCoinsFlow()
     }
 
+    override suspend fun getObservableCoins() = withContext(Dispatchers.IO) {
+        localDataSource.getObservableCoins()
+    }
+
     override suspend fun updatePrices(coinId: String) = withContext(Dispatchers.IO) {
         try {
             val coin = localDataSource.getCoinById(coinId) ?: return@withContext

@@ -37,7 +37,11 @@ class LocalDataSourceImpl @Inject constructor(
     }
 
     override fun getObservableCoinsFlow(): Flow<List<Coin>> {
-        return coinDao.getObservableCoins().map { it.map { it.toDomainModel() } }
+        return coinDao.getObservableCoinsFlow().map { it.map { it.toDomainModel() } }
+    }
+
+    override suspend fun getObservableCoins(): List<Coin> {
+        return coinDao.getObservableCoins().map { it.toDomainModel() }
     }
 
     override suspend fun updatePrice(id: String, cryptoComparePrice: Double, coinCapPrice: Double) {

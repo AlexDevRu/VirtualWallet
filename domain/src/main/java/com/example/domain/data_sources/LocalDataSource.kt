@@ -11,6 +11,7 @@ interface LocalDataSource {
     fun getCoinByIdFlow(id: String) : Flow<Coin?>
     suspend fun changeObservableCoin(id: String, observable: Boolean)
     fun getObservableCoinsFlow() : Flow<List<Coin>>
+    suspend fun getObservableCoins() : List<Coin>
     suspend fun updatePrice(id: String, cryptoComparePrice: Double, coinCapPrice: Double)
     suspend fun getObservableCoinIds() : List<String>
     suspend fun getCoinsWithPrices() : List<Coin>
