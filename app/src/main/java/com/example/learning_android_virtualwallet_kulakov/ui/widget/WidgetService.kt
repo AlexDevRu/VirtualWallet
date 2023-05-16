@@ -69,11 +69,15 @@ class WidgetService : RemoteViewsService() {
             views.setImageViewBitmap(R.id.ivCurrency, bitmap)
 
             val currentSumInUsd1 = amount * (currentCoin?.cryptoComparePrice?.toFloat() ?: 1f)
+            val currentSumInUsd2 = amount * (currentCoin?.coinCapPrice?.toFloat() ?: 1f)
 
             val cryptoComparePrice = currentSumInUsd1 / coin.cryptoComparePrice
-            val coinCapPrice = currentSumInUsd1 / coin.coinCapPrice
-            views.setTextViewText(R.id.tvCryptoComparePrice, String.format("%.2f", cryptoComparePrice))
-            views.setTextViewText(R.id.tvCoinCapPrice, String.format("%.2f", coinCapPrice))
+            val coinCapPrice = currentSumInUsd2 / coin.coinCapPrice
+
+            val displayText1 = if (cryptoComparePrice < 0) getString(R.string.data_is_unavailable) else String.format("%.2f", cryptoComparePrice)
+            val displayText2 = if (coinCapPrice < 0) getString(R.string.data_is_unavailable) else String.format("%.2f", coinCapPrice)
+            views.setTextViewText(R.id.tvCryptoComparePrice, displayText1)
+            views.setTextViewText(R.id.tvCoinCapPrice, displayText2)
 
             return views
         }

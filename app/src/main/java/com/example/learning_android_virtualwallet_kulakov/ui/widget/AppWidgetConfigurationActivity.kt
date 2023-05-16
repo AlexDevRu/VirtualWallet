@@ -31,11 +31,13 @@ class AppWidgetConfigurationActivity : AppCompatActivity(), View.OnClickListener
         }
 
         binding.btnConfirm.setOnClickListener(this)
+        binding.btnCancel.setOnClickListener(this)
     }
 
     override fun onClick(view: View?) {
         when (view) {
             binding.btnConfirm -> confirm()
+            binding.btnCancel -> finish()
         }
     }
 

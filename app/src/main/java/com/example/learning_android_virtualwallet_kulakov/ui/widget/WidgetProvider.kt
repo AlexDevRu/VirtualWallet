@@ -103,6 +103,7 @@ class WidgetProvider : AppWidgetProvider() {
         }
         views.setRemoteAdapter(R.id.lvCoins, listViewIntent)
         views.setEmptyView(R.id.lvCoins, R.id.emptyView)
+        appWidgetManager?.notifyAppWidgetViewDataChanged(appWidgetId, R.id.lvCoins)
 
         views.setOnClickPendingIntent(R.id.btnRefresh, getPenIntent(context))
 
