@@ -4,7 +4,8 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.models.Coin
-import com.example.domain.use_cases.GetAllCoinsUseCase
+import com.example.domain.use_cases.get_all_coins.GetAllCoinsUseCase
+import com.example.domain.use_cases.get_all_coins.GetAllLocalCoinsFlowUseCase
 import com.example.learning_android_virtualwallet_kulakov.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,6 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CoinListViewModel @Inject constructor(
     private val getAllCoinsUseCase: GetAllCoinsUseCase,
+    private val getAllLocalCoinsFlowUseCase: GetAllLocalCoinsFlowUseCase,
     app: Application
 ) : ViewModel() {
 
@@ -29,15 +31,13 @@ class CoinListViewModel @Inject constructor(
     )
 
     private val _query = MutableStateFlow("")
-    val query: String
-        get() = _query.value
 
     private val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val coins = _query.flatMapLatest {
-        getAllCoinsUseCase.getFlow(it).map {
+        getAllLocalCoinsFlowUseCase(it).map {
             val list = mutableListOf<Coin>()
             list.add(usd)
             list.addAll(it)
