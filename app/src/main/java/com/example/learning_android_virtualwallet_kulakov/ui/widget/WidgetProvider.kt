@@ -11,7 +11,7 @@ import android.os.Build
 import android.widget.RemoteViews
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.AppWidgetTarget
-import com.example.domain.use_cases.GetLocalCoinByIdUseCase
+import com.example.domain.use_cases.get_local_coin.GetLocalCoinByIdUseCase
 import com.example.domain.utils.SharedPrefs
 import com.example.learning_android_virtualwallet_kulakov.R
 import com.example.learning_android_virtualwallet_kulakov.ui.Utils

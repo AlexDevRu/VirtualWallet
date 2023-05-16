@@ -5,7 +5,7 @@ import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.bumptech.glide.Glide
 import com.example.domain.models.Coin
-import com.example.domain.use_cases.GetLocalCoinByIdUseCase
+import com.example.domain.use_cases.get_local_coin.GetLocalCoinByIdUseCase
 import com.example.domain.use_cases.GetObservableCoinsUseCase
 import com.example.domain.utils.SharedPrefs
 import com.example.learning_android_virtualwallet_kulakov.R

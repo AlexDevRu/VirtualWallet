@@ -1,4 +1,4 @@
-package com.example.domain.use_cases
+package com.example.domain.use_cases.get_local_coin
 
 import com.example.domain.TestUtils
 import com.example.domain.repositories.Repository

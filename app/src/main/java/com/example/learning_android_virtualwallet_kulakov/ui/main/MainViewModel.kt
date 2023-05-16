@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.*
 import com.example.domain.use_cases.ChangeObservableCoinUseCase
-import com.example.domain.use_cases.GetLocalCoinByIdUseCase
 import com.example.domain.use_cases.GetObservableCoinsFlowUseCase
 import com.example.domain.use_cases.UpdatePricesUseCase
+import com.example.domain.use_cases.get_local_coin.GetLocalCoinByIdFlowUseCase
 import com.example.domain.utils.SharedPrefs
 import com.example.learning_android_virtualwallet_kulakov.ui.Utils
 import com.example.learning_android_virtualwallet_kulakov.ui.models.CoinUiModel
@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getLocalCoinByIdUseCase: GetLocalCoinByIdUseCase,
+    private val getLocalCoinByIdFlowUseCase: GetLocalCoinByIdFlowUseCase,
     private val sharedPrefs: SharedPrefs,
     private val changeObservableCoinUseCase: ChangeObservableCoinUseCase,
     private val getObservableCoinsFlowUseCase: GetObservableCoinsFlowUseCase,
@@ -40,7 +40,7 @@ class MainViewModel @Inject constructor(
         if (it.isNullOrBlank())
             flowOf(null)
         else
-            getLocalCoinByIdUseCase.getFlow(it)
+            getLocalCoinByIdFlowUseCase(it)
     }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
