@@ -24,16 +24,11 @@ class WidgetProvider : AppWidgetProvider() {
 
     companion object {
         private const val REFRESH_ACTION = "android.appwidget.action.APPWIDGET_UPDATE"
-    }
-
-    private fun getPenIntent(context: Context): PendingIntent? {
-        val intent = Intent(context, WidgetProvider::class.java)
-        intent.action = REFRESH_ACTION
-        var flags = PendingIntent.FLAG_UPDATE_CURRENT
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            flags = flags or PendingIntent.FLAG_IMMUTABLE
+        fun getRefreshIntent(context: Context): Intent {
+            val intent = Intent(context, WidgetProvider::class.java)
+            intent.action = REFRESH_ACTION
+            return intent
         }
-        return PendingIntent.getBroadcast(context, 0, intent, flags)
     }
 
     @Inject
@@ -105,7 +100,8 @@ class WidgetProvider : AppWidgetProvider() {
         views.setEmptyView(R.id.lvCoins, R.id.emptyView)
         appWidgetManager?.notifyAppWidgetViewDataChanged(appWidgetId, R.id.lvCoins)
 
-        views.setOnClickPendingIntent(R.id.btnRefresh, getPenIntent(context))
+        val refreshPendingIntent = PendingIntent.getBroadcast(context, 0, getRefreshIntent(context), flags)
+        views.setOnClickPendingIntent(R.id.btnRefresh, refreshPendingIntent)
 
         appWidgetManager?.updateAppWidget(appWidgetId, views)
     }

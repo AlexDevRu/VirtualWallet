@@ -10,9 +10,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -22,8 +19,6 @@ import com.example.learning_android_virtualwallet_kulakov.Extensions.collectFlow
 import com.example.learning_android_virtualwallet_kulakov.databinding.FragmentCoinListBinding
 import com.example.learning_android_virtualwallet_kulakov.ui.adapters.AvailableCoinsAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint

@@ -1,4 +1,4 @@
-package com.example.data.work
+package com.example.learning_android_virtualwallet_kulakov.work
 
 import android.content.Context
 import androidx.hilt.work.HiltWorker
@@ -9,6 +9,7 @@ import com.example.domain.data_sources.CryptoCompareDataSource
 import com.example.domain.data_sources.LocalDataSource
 import com.example.domain.use_cases.GetObservableCoinsFlowUseCase
 import com.example.domain.utils.SharedPrefs
+import com.example.learning_android_virtualwallet_kulakov.ui.widget.WidgetProvider
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.last
@@ -41,6 +42,10 @@ class ConvertWorker @AssistedInject constructor(
                 localDataSource.updatePrice(coin.id, priceInUsd1, priceInUsd2)
             }
         }
+
+        val refreshIntent = WidgetProvider.getRefreshIntent(applicationContext)
+        applicationContext.sendBroadcast(refreshIntent)
+
         return Result.success()
     }
 

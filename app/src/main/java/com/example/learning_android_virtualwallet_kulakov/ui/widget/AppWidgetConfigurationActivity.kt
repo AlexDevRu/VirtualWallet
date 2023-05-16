@@ -42,7 +42,6 @@ class AppWidgetConfigurationActivity : AppCompatActivity(), View.OnClickListener
     }
 
     private fun confirm() {
-        val appWidgetManager = AppWidgetManager.getInstance(this)
         val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         setResult(RESULT_OK, resultValue)
         finish()

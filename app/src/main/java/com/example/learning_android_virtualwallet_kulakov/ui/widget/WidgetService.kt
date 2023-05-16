@@ -1,6 +1,5 @@
 package com.example.learning_android_virtualwallet_kulakov.ui.widget
 
-import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
@@ -27,10 +26,10 @@ class WidgetService : RemoteViewsService() {
     lateinit var getLocalCoinByIdUseCase: GetLocalCoinByIdUseCase
 
     override fun onGetViewFactory(intent: Intent?): RemoteViewsFactory {
-        return WidgetItemFactory(intent?.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0) ?: 0)
+        return WidgetItemFactory()
     }
 
-    inner class WidgetItemFactory(private val appWidgetId: Int): RemoteViewsFactory {
+    inner class WidgetItemFactory: RemoteViewsFactory {
 
         private lateinit var coins: List<Coin>
         private var currentCoin: Coin? = null
