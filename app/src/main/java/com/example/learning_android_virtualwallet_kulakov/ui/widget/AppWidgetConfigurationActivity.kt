@@ -5,7 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.work.ExistingPeriodicWorkPolicy
+import com.example.learning_android_virtualwallet_kulakov.R
 import com.example.learning_android_virtualwallet_kulakov.databinding.ActivityWidgetConfigurationBinding
+import com.example.learning_android_virtualwallet_kulakov.ui.Utils
 
 class AppWidgetConfigurationActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -42,6 +45,12 @@ class AppWidgetConfigurationActivity : AppCompatActivity(), View.OnClickListener
     }
 
     private fun confirm() {
+        val interval = when (binding.radioGroup.checkedRadioButtonId) {
+            R.id.rb6 -> 6L
+            R.id.rb12 -> 12L
+            else -> 24L
+        }
+        Utils.startWorker(applicationContext, ExistingPeriodicWorkPolicy.UPDATE, interval, 0)
         val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         setResult(RESULT_OK, resultValue)
         finish()

@@ -70,8 +70,8 @@ class WidgetService : RemoteViewsService() {
             val currentSumInUsd1 = amount * (currentCoin?.cryptoComparePrice?.toFloat() ?: 1f)
             val currentSumInUsd2 = amount * (currentCoin?.coinCapPrice?.toFloat() ?: 1f)
 
-            val cryptoComparePrice = currentSumInUsd1 / coin.cryptoComparePrice
-            val coinCapPrice = currentSumInUsd2 / coin.coinCapPrice
+            val cryptoComparePrice = if (coin.cryptoComparePrice > 0) currentSumInUsd1 / coin.cryptoComparePrice else -1.0
+            val coinCapPrice = if (coin.coinCapPrice > 0) currentSumInUsd2 / coin.coinCapPrice else -1.0
 
             val displayText1 = if (cryptoComparePrice < 0) getString(R.string.data_is_unavailable) else String.format("%.2f", cryptoComparePrice)
             val displayText2 = if (coinCapPrice < 0) getString(R.string.data_is_unavailable) else String.format("%.2f", coinCapPrice)

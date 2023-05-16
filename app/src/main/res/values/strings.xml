@@ -12,4 +12,7 @@
     <string name="confirm">Confirm</string>
     <string name="coin_amount">%.2f %s</string>
     <string name="no_subscribed_coins">No subscribed coins</string>
+    <string name="_6_hours">6 hours</string>
+    <string name="_12_hours">12 hours</string>
+    <string name="_24_hours">24 hours</string>
 </resources>

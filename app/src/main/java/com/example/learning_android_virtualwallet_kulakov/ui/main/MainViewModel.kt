@@ -5,18 +5,17 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.*
-import com.example.learning_android_virtualwallet_kulakov.work.ConvertWorker
 import com.example.domain.use_cases.ChangeObservableCoinUseCase
 import com.example.domain.use_cases.GetLocalCoinByIdUseCase
 import com.example.domain.use_cases.GetObservableCoinsFlowUseCase
 import com.example.domain.use_cases.UpdatePricesUseCase
 import com.example.domain.utils.SharedPrefs
+import com.example.learning_android_virtualwallet_kulakov.ui.Utils
 import com.example.learning_android_virtualwallet_kulakov.ui.models.CoinUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -59,8 +58,8 @@ class MainViewModel @Inject constructor(
                 Log.d("asd", "currentSumInUsd1: $currentSumInUsd1")
                 Log.d("asd", "currentSumInUsd2: $currentSumInUsd2")
                 it.map {
-                    val cryptoComparePrice = currentSumInUsd1 / it.cryptoComparePrice
-                    val coinCapPrice = currentSumInUsd2 / it.coinCapPrice
+                    val cryptoComparePrice = if (it.cryptoComparePrice > 0) currentSumInUsd1 / it.cryptoComparePrice else -1.0
+                    val coinCapPrice = if (it.coinCapPrice > 0) currentSumInUsd2 / it.coinCapPrice else -1.0
                     Log.d("asd", "cryptoComparePrice: $cryptoComparePrice")
                     Log.d("asd", "coinCapPrice: $coinCapPrice")
                     CoinUiModel.CoinUI(it, cryptoComparePrice, coinCapPrice)
@@ -77,20 +76,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch { _selectedCoinId.emit(sharedPrefs.selectedCoinId) }
         viewModelScope.launch { _amount.emit(sharedPrefs.coinAmount) }
 
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-        val workRequest = PeriodicWorkRequestBuilder<ConvertWorker>(12, TimeUnit.HOURS)
-            .setInitialDelay(12, TimeUnit.HOURS)
-            .setConstraints(constraints)
-            .build()
-
-        WorkManager.getInstance(app).enqueueUniquePeriodicWork(
-            "SYNC",
-            ExistingPeriodicWorkPolicy.KEEP,
-            workRequest
-        )
+        Utils.startWorker(app, ExistingPeriodicWorkPolicy.KEEP, 12, 12)
     }
 
     fun setSelectedCoin(coinId: String) {
