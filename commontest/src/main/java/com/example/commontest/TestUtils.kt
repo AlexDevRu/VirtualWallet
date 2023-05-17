@@ -1,4 +1,4 @@
-package com.example.domain
+package com.example.commontest
 
 import com.example.domain.models.Coin
 

@@ -4,6 +4,11 @@ import com.example.data.dto.CoinListResponseDto
 import com.example.data.entities.CoinEntity
 import com.example.domain.models.Coin
 
+interface Mapper<E, D> {
+    fun toDomainModel(domainModel : E) : D
+    fun toEntity(entity : D) : E
+}
+
 fun CoinListResponseDto.toDomainModel() = data.map { (_, coin) ->
     Coin(
         id = coin.id,

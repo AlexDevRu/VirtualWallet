@@ -14,4 +14,5 @@ dependencies {
 
     testImplementation "junit:junit:$junit"
     testImplementation "io.mockk:mockk:$mockk"
+    testImplementation project(":commontest")
 }

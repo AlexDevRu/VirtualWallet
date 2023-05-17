@@ -40,6 +40,7 @@ android {
 
 dependencies {
     implementation project(":domain")
+    testImplementation project(":commontest")
 
     // DI
     implementation "com.google.dagger:hilt-android:$hiltVersion"
@@ -64,6 +65,8 @@ dependencies {
     debugImplementation "com.github.chuckerteam.chucker:library:$chucker"
     releaseImplementation "com.github.chuckerteam.chucker:library-no-op:$chucker"
 
-    testImplementation "junit:junit:4.13.2"
+    testImplementation "junit:junit:$junit"
+    testImplementation "io.mockk:mockk:$mockk"
+    testImplementation "org.robolectric:robolectric:4.10.2"
     androidTestImplementation "androidx.test.ext:junit:1.1.5"
 }

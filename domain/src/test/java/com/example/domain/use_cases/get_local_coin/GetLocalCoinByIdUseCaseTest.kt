@@ -1,6 +1,6 @@
 package com.example.domain.use_cases.get_local_coin
 
-import com.example.domain.TestUtils
+import com.example.commontest.TestUtils
 import com.example.domain.repositories.Repository
 import io.mockk.coEvery
 import io.mockk.coVerify

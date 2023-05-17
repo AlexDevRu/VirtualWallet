@@ -1,8 +1,7 @@
 package com.example.domain.use_cases
 
-import com.example.domain.TestUtils
+import com.example.commontest.TestUtils
 import com.example.domain.repositories.Repository
-import com.example.domain.use_cases.get_all_coins.GetAllCoinsUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

@@ -16,3 +16,4 @@ rootProject.name = "Learning_Android_VirtualWallet_Kulakov"
 include ':app'
 include ':data'
 include ':domain'
+include ':commontest'
