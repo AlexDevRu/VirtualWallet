@@ -2,7 +2,7 @@ package com.example.data.dao
 
 import androidx.room.Room
 import com.example.data.entities.CoinEntity
-import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -56,6 +56,16 @@ class CoinDaoTest {
     }
 
     @Test
+    fun `get coin by id flow`() = runBlocking {
+        val list = List(10) {
+            CoinEntity(it.toString(), "imageUrl", "A", "A", 12.54, 34.67, true)
+        }
+        coinDao.insertCoins(list)
+        val coin = coinDao.getCoinByIdFlow("1").firstOrNull()
+        assertTrue(coin != null)
+    }
+
+    @Test
     fun `update coin observable`() = runBlocking {
         val list = List(10) {
             CoinEntity(it.toString(), "imageUrl", "A", "A", 12.54, 34.67, false)
@@ -96,7 +106,7 @@ class CoinDaoTest {
         }
         coinDao.insertCoins(list)
         val expected = listOf(list[0], list[2], list[4], list[6], list[8])
-        val actual = coinDao.getObservableCoinsFlow().last()
+        val actual = coinDao.getObservableCoinsFlow().firstOrNull()
         assertEquals(expected, actual)
     }
 
